@@ -4,6 +4,7 @@ function undistorted_img = undistortImage(img, K, D, bilinear_interpolation)
 if nargin < 4
     bilinear_interpolation = 0;
 end
+bilinear_interpolation = 0;
 
 [height, width] = size(img);
 
