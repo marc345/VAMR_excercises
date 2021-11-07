@@ -7,3 +7,23 @@ function matches = matchDescriptors(...
 % respectively. matches(i) will be zero if there is no database descriptor
 % with an SSD < lambda * min(SSD). No two non-zero elements of matches will
 % be equal.
+    
+    % get neares quer descriptor for each database descriptor
+    % also return the index of that dat
+    [dists,matches] = pdist2(double(database_descriptors)', double(query_descriptors)', ...
+    'euclidean', 'Smallest', 1);
+    
+    % get the smallest, non-zero distance
+    dists = dists(dists ~= 0);
+    dmin = min(dists);
+    % return only matches that are below a certain distance threshold
+    matches(dists >= lambda * dmin) = 0;
+    
+    % each database descriptor can only be matched once by a query
+    unique_matches = zeros(size(matches));
+    [~, unique_idxs, ~] = unique(matches, 'stable');
+    % return only unique database descriptor matches
+    unique_matches(unique_idxs) = matches(unique_idxs);
+    matches = unique_matches;
+
+end
